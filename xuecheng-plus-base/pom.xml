@@ -11,7 +11,7 @@
 
 
     <artifactId>xuecheng-plus-base</artifactId>
-
+<!--2-->
     <dependencies>
         <dependency>
             <groupId>org.projectlombok</groupId>
