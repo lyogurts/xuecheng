@@ -169,6 +169,10 @@
                 <artifactId>swagger-spring-boot-starter</artifactId>
                 <version>${swagger-spring-boot-starter.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-test</artifactId>
+            </dependency>
         </dependencies>
 
     </dependencyManagement>
