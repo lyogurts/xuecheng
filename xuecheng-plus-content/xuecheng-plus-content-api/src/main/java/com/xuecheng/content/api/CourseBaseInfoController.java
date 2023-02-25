@@ -23,7 +23,8 @@ public class CourseBaseInfoController {
     @ApiOperation("课程查询接口")
     @PutMapping("/course/list")
     public PageResult<CourseBase> list(PageParams pageParams,@RequestBody QueryCourseParamsDto queryCourseParamsDto){
-      return   courseBaseInfoService.queryCourseBaseList(pageParams, queryCourseParamsDto);
-
+        PageResult<CourseBase> courseBasePageResult = courseBaseInfoService.queryCourseBaseList(pageParams, queryCourseParamsDto);
+        System.out.println(courseBasePageResult);
+        return courseBasePageResult;
     }
 }

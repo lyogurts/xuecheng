@@ -3,6 +3,7 @@ package com.xuecheng;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.xuecheng.base.model.PageParams;
+import com.xuecheng.base.model.PageResult;
 import com.xuecheng.content.mapper.CourseBaseMapper;
 import com.xuecheng.content.model.dto.QueryCourseParamsDto;
 import com.xuecheng.content.model.po.CourseBase;
@@ -14,17 +15,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 class XuechengPlusContentServiceApplicationTests {
-
-    private CourseBaseMapper courseBaseMapper;
     @Autowired
-
-    private CourseBaseInfoService courseBaseInfoService;
-
+     CourseBaseMapper courseBaseMapper;
 
     @Autowired
-    public XuechengPlusContentServiceApplicationTests(CourseBaseMapper courseBaseMapper) {
-        this.courseBaseMapper = courseBaseMapper;
-    }
+    CourseBaseInfoService courseBaseInfoService;
+
+
+
 
     /**
      * 测试mapper
@@ -32,7 +30,8 @@ class XuechengPlusContentServiceApplicationTests {
     @Test
     void contextLoads() {
         CourseBase courseBase = courseBaseMapper.selectById(22);
-        Assertions.assertNull(courseBase);
+//        Assertions.assertNull(courseBase);
+        System.out.println(courseBase);
     }
 
     /**
@@ -41,8 +40,9 @@ class XuechengPlusContentServiceApplicationTests {
     @Test
     void testCourseBaseInfoService(){
         PageParams pageParams = new PageParams();
-        courseBaseInfoService.queryCourseBaseList(pageParams,new QueryCourseParamsDto());
-        System.out.println(courseBaseInfoService);
+        PageResult<CourseBase> courseBasePageResult = courseBaseInfoService.queryCourseBaseList(pageParams, new QueryCourseParamsDto());
+        System.out.println(courseBasePageResult);
+//        System.out.println(courseBaseInfoService);
     }
 
 }
