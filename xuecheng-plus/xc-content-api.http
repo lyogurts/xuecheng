@@ -1,0 +1,10 @@
+# 课程查询列表
+PUT {{content_host}}/content/course/list?pageNo=1&pageSize=10
+Content-Type: application/json
+
+
+ {
+  "auditStatus": "202004",
+  "courseName": "java",
+  "publishStatus": ""
+}
