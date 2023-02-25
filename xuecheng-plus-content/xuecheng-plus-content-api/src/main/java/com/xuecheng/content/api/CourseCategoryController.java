@@ -22,7 +22,7 @@ public class CourseCategoryController {
     @Autowired
     CourseCategoryService courseCategoryService;
 
-    @ApiOperation("课程查询接口")
+    @ApiOperation("课程分类查询接口")
     @GetMapping("/course-category/tree-nodes")
     public List<CourseCategoryTreeDto> queryTreeNodes(){
         List<CourseCategoryTreeDto> categoryTreeDtos = courseCategoryService.queryTreeNodes("1");
