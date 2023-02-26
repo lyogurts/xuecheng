@@ -2,6 +2,8 @@ package com.xuecheng.content.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.xuecheng.base.exception.CommonError;
+import com.xuecheng.base.exception.XueChengPlusException;
 import com.xuecheng.base.model.PageParams;
 import com.xuecheng.base.model.PageResult;
 import com.xuecheng.content.mapper.CourseBaseMapper;
@@ -83,7 +85,11 @@ public class CourseBaseInfoServiceImpl implements CourseBaseInfoService {
 
         //参数合法性校验
         if (StringUtils.isBlank(addCourseDto.getName())) {
-            throw new RuntimeException("课程名称为空");
+//    这里是自定义异常
+            //            throw new RuntimeException("课程名称为空");
+//            这里是用规范的CommonError异常
+//      这个跟下面的一样，我更喜欢这个。  throw new XueChengPlusException(CommonError.REQUEST_NULL.getErrMessage());
+        XueChengPlusException.cast(CommonError.REQUEST_NULL.getErrMessage());
         }
 
         if (StringUtils.isBlank(addCourseDto.getMt())) {
