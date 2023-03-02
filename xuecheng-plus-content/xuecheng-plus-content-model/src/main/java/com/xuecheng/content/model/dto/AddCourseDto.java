@@ -1,5 +1,6 @@
 package com.xuecheng.content.model.dto;
 
+import com.xuecheng.base.exception.ValidationGroups;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -30,7 +31,9 @@ public class AddCourseDto {
  @ApiModelProperty(value = "课程标签")
  private String tags;
 
- @NotEmpty(message = "课程分类不能为空")
+ @NotEmpty(message = "课程分类不能为空",groups = {ValidationGroups.Inster.class})
+ @NotEmpty(message = "更新课程分类不能为空",groups = {ValidationGroups.Update.class})
+
  @ApiModelProperty(value = "大分类", required = true)
  private String mt;
 

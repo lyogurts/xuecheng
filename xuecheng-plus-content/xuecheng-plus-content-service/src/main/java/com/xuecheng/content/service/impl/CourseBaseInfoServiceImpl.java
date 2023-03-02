@@ -11,6 +11,7 @@ import com.xuecheng.content.mapper.CourseCategoryMapper;
 import com.xuecheng.content.mapper.CourseMarketMapper;
 import com.xuecheng.content.model.dto.AddCourseDto;
 import com.xuecheng.content.model.dto.CourseBaseInfoDto;
+import com.xuecheng.content.model.dto.EditCourseDto;
 import com.xuecheng.content.model.dto.QueryCourseParamsDto;
 import com.xuecheng.content.model.po.CourseBase;
 import com.xuecheng.content.model.po.CourseCategory;
@@ -44,6 +45,8 @@ public class CourseBaseInfoServiceImpl implements CourseBaseInfoService {
 
     @Autowired
     CourseCategoryMapper courseCategoryMapper;
+    @Autowired
+    CourseMarketServiceImpl courseMarketService;
 
     @Override
     public PageResult<CourseBase> queryCourseBaseList(PageParams params, QueryCourseParamsDto queryCourseParamsDto) {
@@ -160,36 +163,10 @@ public class CourseBaseInfoServiceImpl implements CourseBaseInfoService {
         return courseBaseInfoDto;
     }
 
-//    public CourseBaseInfoDto getCourseBaseInfoDto( Long id){
-////        基本信息
-//        CourseBase courseBase = courseBaseMapper.selectById(id);
-////        营销信息
-//        CourseMarket courseMarket = courseMarketMapper.selectById(id);
-////        组装信息
-//        CourseBaseInfoDto courseBaseInfoDto = new CourseBaseInfoDto();
-//        BeanUtils.copyProperties(courseBase,courseBaseInfoDto);
-//        BeanUtils.copyProperties(courseMarket,courseBaseInfoDto);
-////        根据课程分类的id查询分类的名称
-//        String mt = courseBase.getMt();
-//        String st = courseBase.getSt();
-//        CourseCategory mtCategory = courseCategoryMapper.selectById(mt);
-//        CourseCategory stCategory = courseCategoryMapper.selectById(st);
-//
-//        if (mtCategory!=null){
-////            大分类名称
-//            String mtCategoryName = mtCategory.getName();
-//            //拼接返回值
-//            courseBaseInfoDto.setMtName(mtCategoryName);
-//        }
-//        if (stCategory!=null){
-////            小分类名称
-//            String stCategoryName = stCategory.getName();
-////            拼接返回值
-//            courseBaseInfoDto.setStName(stCategoryName);
-//        }
-//
-//        return  courseBaseInfoDto;
-//    }
+
+
+
+
 //根据课程id查询课程基本信息，包括基本信息和营销信息
 public CourseBaseInfoDto getCourseBaseInfo(long courseId){
 
@@ -214,4 +191,44 @@ public CourseBaseInfoDto getCourseBaseInfo(long courseId){
     return courseBaseInfoDto;
 
 }
+
+    @Override
+    public CourseBaseInfoDto updateCourseBase(Long companyId, EditCourseDto dto) {
+        //校验
+
+        // 对课程id的校验
+        Long id = dto.getId();
+        CourseBase courseBase = courseBaseMapper.selectById(id);
+        if (courseBase==null)throw new XueChengPlusException("课程不存在");
+        //校验本机构只能修改本机构的课程
+        if (!courseBase.getCompanyId().equals(companyId))throw new XueChengPlusException("校验本机构只能修改本机构的课程");
+
+        //封装数据EditCourseDto(它比AddCourseDto多了一个id，继承关系) =封装课程基本信息CourseBase+封装课程营销信息CourseMarket
+       //copy属性,封装基本信息courseBase
+        BeanUtils.copyProperties(dto,courseBase);
+       //  修改修改时间
+        courseBase.setChangeDate(LocalDateTime.now());
+        //更新数据库
+        int i = courseBaseMapper.updateById(courseBase);
+        //封装课程营销信息，courseMarket
+        CourseMarket courseMarket = new CourseMarket();
+        BeanUtils.copyProperties(dto,courseMarket);
+
+        //这里算是把前台的数据传递给后台， 你想一下，这里是不是还有一次关于课程收费价格的校验呢
+        //收费课程必须写价格且价格大于0
+        String charge = courseMarket.getCharge();
+        if(charge.equals("201001")){
+            Float price = courseMarket.getPrice();
+            if(price == null || price.floatValue()<=0){
+                throw new RuntimeException("课程设置了收费价格不能为空且必须大于0");
+            }
+        }
+        //更新数据库
+        boolean b = courseMarketService.saveOrUpdate(courseMarket);
+
+        //请求数据库,id是前面获取到的id,相当于更新两个数据库， 调用下面这个方法一次查询两个数据库
+        //这个方法在impl写着呢。
+        CourseBaseInfoDto courseBaseInfo = getCourseBaseInfo(id);
+        return courseBaseInfo;
+    }
 }
