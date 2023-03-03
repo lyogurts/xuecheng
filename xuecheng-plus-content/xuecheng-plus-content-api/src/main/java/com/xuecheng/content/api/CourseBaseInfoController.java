@@ -41,7 +41,7 @@ public class CourseBaseInfoController {
     }
 
     @GetMapping("/course/{courseId}")
-    public CourseBaseInfoDto getCourseBaseById(Long courseId){
+    public CourseBaseInfoDto getCourseBaseById( @PathVariable Long courseId){
         return courseBaseInfoService.getCourseBaseInfo(courseId);
     }
 
