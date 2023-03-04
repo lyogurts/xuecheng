@@ -8,6 +8,12 @@ server:
 spring:
   application:
     name: content-api
+  cloud:
+    nacos:
+      server-addr: 42.193.98.249:8848
+      discovery:
+        namespace: dev-lyogurts
+        group: xuecheng-plus-project
 
 # 日志文件配置路径
 logging:
