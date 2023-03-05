@@ -11,8 +11,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-@Service
+/**
+ * @author mrt
+ * @version 1.0
+ * @description TODO
+ * @date 2022/12/10 11:39
+ */
 @Slf4j
+@Service
 public class CourseCategoryServiceImpl implements CourseCategoryService {
     @Autowired
     CourseCategoryMapper courseCategoryMapper;
